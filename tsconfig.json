@@ -1,0 +1,41 @@
+{
+  "include": [
+    "client/src/App.tsx",
+    "client/src/main.tsx",
+    "client/src/index.css",
+    "client/src/components/ErrorBoundary.tsx",
+    "client/src/components/Navbar.tsx",
+    "client/src/contexts/ThemeContext.tsx",
+    "client/src/data/**/*",
+    "client/src/hooks/**/*",
+    "client/src/lib/utils.ts",
+    "client/src/pages/AdminPage.tsx",
+    "client/src/pages/Home.tsx",
+    "client/src/pages/MyRequestsPage.tsx",
+    "client/src/pages/NotFound.tsx",
+    "client/src/pages/QAPage.tsx",
+    "client/src/pages/SupplierApplyPage.tsx",
+    "client/src/pages/SupplierDetailPage.tsx",
+    "client/src/pages/SuppliersPage.tsx"
+  ],
+  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/typescript/tsbuildinfo",
+    "noEmit": true,
+    "module": "ESNext",
+    "strict": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@/*": ["./client/src/*"],
+      "@shared/*": ["./shared/*"]
+    }
+  }
+}
