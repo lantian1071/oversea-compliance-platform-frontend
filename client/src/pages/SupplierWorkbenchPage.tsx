@@ -2,6 +2,7 @@ import { brandProfiles, serviceProducts, serviceRequests, suppliers } from "@/da
 import { Award, BarChart3, Briefcase, Building2, CheckCircle2, Eye, PackageCheck, Shield } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const tabs = [
   { key: "requests", label: "撮合记录" },
@@ -10,9 +11,17 @@ const tabs = [
   { key: "insights", label: "洞察权益" },
 ] as const;
 
-type TabKey = (typeof tabs)[number]["key"];
+
 
 export default function SupplierWorkbenchPage() {
+  const { language } = useLanguage();
+  const t = (zh, en) => language === "en" ? en : zh;
+  const tabs = [
+    { key: "requests", label: t("????", "Match Records") },
+    { key: "products", label: t("????", "Service Products") },
+    { key: "brand", label: t(t(t(t(t(t("???", "Language: "), "Template: "), "Published"), "Not Signed"), "Signed"), "Brand Page") },
+    { key: "insights", label: t("????", "Insight Benefits") },
+  ] as const;
   const [activeTab, setActiveTab] = useState<TabKey>("requests");
   const supplier = suppliers[0];
   const products = serviceProducts.filter((item) => item.supplierName === supplier.companyName);
