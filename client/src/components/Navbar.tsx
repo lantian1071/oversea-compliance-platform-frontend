@@ -3,19 +3,21 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useLanguage } from "@/i18n/LanguageContext";
 
-const navLinks = [
-  { href: "/qa", label: "智能问答", icon: Bot },
-  { href: "/suppliers", label: "找服务商", icon: Search },
-  { href: "/supplier-apply", label: "服务商入驻", icon: Building2 },
+  const { language, setLanguage } = useLanguage();
+  
+  const navLinks = [
+  { href: "/qa", label: language === 'en' ? "AI Q&A" : "智能问答", icon: Bot },
+  { href: "/suppliers", label: language === 'en' ? "Find Providers" : "找服务商", icon: Search },
+  { href: "/supplier-apply", label: language === 'en' ? "Provider Onboarding" : "服务商入驻", icon: Building2 },
 ];
 
 const moreLinks = [
-  { href: "/publish-request", label: "发布需求", icon: FileText },
-  { href: "/supplier-apply", label: "服务商入驻", icon: Building2 },
-  { href: "/products", label: "服务产品", icon: Briefcase },
-  { href: "/brands", label: "品牌展示", icon: Grid3X3 },
-  { href: "/insights", label: "洞察报告", icon: BarChart3 },
-  { href: "/workbench", label: "服务商工作台", icon: LayoutDashboard },
+  { href: "/publish-request", label: language === 'en' ? "Post Demand" : "发布需求", icon: FileText },
+  { href: "/supplier-apply", label: language === 'en' ? "Provider Onboarding" : "服务商入驻", icon: Building2 },
+  { href: "/products", label: language === 'en' ? "Service Products" : "服务产品", icon: Briefcase },
+  { href: "/brands", label: language === 'en' ? "Brand Pages" : "品牌展示", icon: Grid3X3 },
+  { href: "/insights", label: language === 'en' ? "Insights" : "洞察报告", icon: BarChart3 },
+  { href: "/workbench", label: language === 'en' ? "Provider Workbench" : "服务商工作台", icon: LayoutDashboard },
 ];
 
 export default function Navbar() {
@@ -23,7 +25,6 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
-  const { language, setLanguage } = useLanguage();
   const isActive = (href) => location === href || location.startsWith(href + "/");
 
   return (
@@ -36,7 +37,7 @@ export default function Navbar() {
                 <Globe className="w-4 h-4 text-[oklch(0.82_0.12_75)]" />
               </div>
               <div>
-                <span className="font-serif font-bold text-foreground text-base leading-none block">出海合规</span>
+                <span className="font-serif font-bold text-foreground text-base leading-none block">{language === 'en' ? "Overseas Compliance" : "出海合规"}</span>
                 <span className="text-[10px] text-muted-foreground leading-none">Global Compliance Platform</span>
               </div>
             </div>
@@ -51,7 +52,7 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
-            {/* 更多 下拉菜单 */}
+            {/* {language === 'en' ? "More" : "更多"} 下拉菜单 */}
             <div className="relative">
               <button
                 onClick={() => setMoreOpen(!moreOpen)}
