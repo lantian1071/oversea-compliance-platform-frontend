@@ -5,7 +5,6 @@ const { execSync } = require('child_process');
 const root = process.cwd();
 const srcDir = path.join(root, 'client', 'src');
 const distDir = path.join(root, 'dist');
-const esbuildExe = path.join(root, 'node_modules', '.pnpm', '@esbuild+win32-x64@0.21.5', 'node_modules', '@esbuild', 'win32-x64', 'esbuild.exe');
 
 console.log('Cleaning dist...');
 if (fs.existsSync(distDir)) fs.rmSync(distDir, { recursive: true });
@@ -15,9 +14,11 @@ console.log('Building JS...');
 const entry = path.join(srcDir, 'main.tsx');
 const outfile = path.join(distDir, 'assets', 'index.js');
 
+const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
 const args = [
-  '"' + esbuildExe + '"',
-  '"' + entry + '"',
+  npx,
+  'esbuild',
+  entry,
   '--bundle',
   '--minify',
   '--format=iife',
@@ -31,14 +32,14 @@ const args = [
   '--external:*.png',
   '--external:*.svg',
   '--conditions=style',
-  '--outfile="' + outfile + '"',
+  '--outfile=' + outfile,
   '--alias:@=' + srcDir.replace(/\\/g, '/'),
-  '--alias:@shared=' + path.join(root, 'shared').replace(/\\/g, '/'),
-  '--alias:@assets=' + path.join(root, 'attached_assets').replace(/\\/g, '/'),
 ];
+const alias = '--alias:@shared=' + path.join(root, 'shared').replace(/\\/g, '/');
+if (fs.existsSync(path.join(root, 'shared'))) args.push(alias);
 
 try {
-  execSync(args.join(' '), { stdio: 'inherit', shell: 'cmd.exe' });
+  execSync(args.join(' '), { stdio: 'inherit', shell: true });
 } catch(e) {
   console.error('Build JS failed');
   process.exit(1);
@@ -47,13 +48,11 @@ try {
 console.log('Building CSS...');
 const cssIn = path.join(srcDir, 'index.css');
 const cssOut = path.join(distDir, 'assets', 'index.css');
-
 let cssContent = fs.readFileSync(cssIn, 'utf8');
 const lines = cssContent.split(String.fromCharCode(10)).filter(l => !l.trim().startsWith('@import ') && l.trim().length > 0);
 fs.writeFileSync(cssOut, lines.join(String.fromCharCode(10)));
 
 console.log('Creating index.html...');
-
 const html = [
   '<!doctype html>',
   '<html lang="zh-CN">',
@@ -73,7 +72,5 @@ const html = [
   '  </body>',
   '</html>',
 ].join(String.fromCharCode(10));
-
 fs.writeFileSync(path.join(distDir, 'index.html'), html);
-
 console.log('Build complete!');
