@@ -17,12 +17,16 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useParams } from "wouter";
+import { useLanguage } from "@/i18n/LanguageContext";
 import { toast } from "sonner";
 
 export default function SupplierDetailPage() {
   const { id } = useParams<{ id: string }>();
   const supplier = getSupplierById(Number(id));
   const [showInquiry, setShowInquiry] = useState(false);
+  const { language } = useLanguage();
+  const t = (zh, en) => language === "en" ? en : zh;
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -47,10 +51,10 @@ export default function SupplierDetailPage() {
 
   const handleSubmit = () => {
     if (!form.title.trim()) {
-      toast.error("请填写需求标题");
+      toast.error(t("请填写需求标题", "Please enter a demand title"));
       return;
     }
-    toast.success("询价信息已在本地演示提交。静态托管版本不会写入服务器。");
+    toast.success(t("询价信息已在本地演示提交。静态托管版本不会写入服务器。", "Inquiry submitted in local demo. Static version does not write to server."));
     setShowInquiry(false);
     setForm({ title: "", description: "", targetCountry: "", serviceType: "", budget: "" });
   };
@@ -99,7 +103,7 @@ export default function SupplierDetailPage() {
                       ))}
                       <span className="text-sm font-semibold text-foreground ml-1">{supplier.rating}</span>
                     </div>
-                    <span className="text-sm text-muted-foreground">{supplier.caseCount} 个成功案例</span>
+                    <span className="text-sm text-muted-foreground">{supplier.caseCount}{t("个成功案例", " successful cases")}</span>
                     <span className="text-sm text-muted-foreground">成立于 {supplier.foundedYear}</span>
                   </div>
                 </div>
@@ -156,7 +160,7 @@ export default function SupplierDetailPage() {
                   <input
                     value={form.title}
                     onChange={(event) => setForm({ ...form, title: event.target.value })}
-                    placeholder="需求标题，例如：新加坡EP准证申请"
+                    placeholder={t("需求标题，例如：新加坡EP准证申请", "Demand title, e.g. Singapore EP application")}
                     className="w-full px-4 py-2.5 rounded-xl border border-border/60 bg-background text-sm focus:outline-none focus:border-primary/50"
                   />
                   <select
@@ -164,7 +168,7 @@ export default function SupplierDetailPage() {
                     onChange={(event) => setForm({ ...form, targetCountry: event.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-border/60 bg-background text-sm"
                   >
-                    <option value="">请选择目标国家</option>
+                    <option value="">{t("请选择目标国家", "Please select target country")}</option>
                     {countries.map((country) => <option key={country} value={country}>{country}</option>)}
                   </select>
                   <select
@@ -172,7 +176,7 @@ export default function SupplierDetailPage() {
                     onChange={(event) => setForm({ ...form, serviceType: event.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-border/60 bg-background text-sm"
                   >
-                    <option value="">请选择服务类型</option>
+                    <option value="">{t("请选择服务类型", "Please select service type")}</option>
                     {serviceTypes.map((type) => <option key={type} value={type}>{type}</option>)}
                   </select>
                   <select
@@ -180,7 +184,7 @@ export default function SupplierDetailPage() {
                     onChange={(event) => setForm({ ...form, budget: event.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-border/60 bg-background text-sm"
                   >
-                    <option value="">请选择预算</option>
+                    <option value="">{t("请选择预算", "Please select budget")}</option>
                     <option value="5,000元以内">5,000元以内</option>
                     <option value="5,000 - 20,000元">5,000 - 20,000元</option>
                     <option value="20,000 - 50,000元">20,000 - 50,000元</option>
@@ -189,7 +193,7 @@ export default function SupplierDetailPage() {
                   <textarea
                     value={form.description}
                     onChange={(event) => setForm({ ...form, description: event.target.value })}
-                    placeholder="补充说明您的需求"
+                    placeholder={t("补充说明您的需求", "Add details about your needs")}
                     rows={3}
                     className="w-full px-4 py-2.5 rounded-xl border border-border/60 bg-background text-sm resize-none"
                   />
