@@ -14,7 +14,13 @@ console.log('Building JS...');
 const entry = path.join(srcDir, 'main.tsx');
 const outfile = path.join(distDir, 'assets', 'index.js');
 
-const esbuildPath = path.join(root, 'node_modules', '.pnpm', '@esbuild+win32-x64@0.21.5', 'node_modules', '@esbuild', 'win32-x64', 'esbuild.exe');
+// Find esbuild binary
+var _fs = require('fs');
+var _path = require('path');
+var esbuildPath = _path.join(root, 'node_modules', '.pnpm', '@esbuild+win32-x64@0.21.5', 'node_modules', '@esbuild', 'win32-x64', 'esbuild.exe');
+if (!_fs.existsSync(esbuildPath)) {
+  esbuildPath = 'npx esbuild';
+}
 const args = [
   esbuildPath,
   entry,
