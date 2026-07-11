@@ -30,6 +30,7 @@ const args = [
   '--global-name=AppEntry',
   '--platform=browser',
   '--target=es2020',
+  '--charset=utf8',,
   '--jsx=automatic',
   '--loader:.css=css',
   '--external:tailwindcss',

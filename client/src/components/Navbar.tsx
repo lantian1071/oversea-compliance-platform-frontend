@@ -85,12 +85,12 @@ export default function Navbar() {
             <div className="relative">
               <button onClick={() => setLangOpen(!langOpen)} className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
                 <Globe className="w-4 h-4" />
-                <span>{language === "zh" ? "\u4e2d\u6587" : "EN"}</span>
+                <span>{language === "zh" ? "中文" : "EN"}</span>
                 <ChevronDown className="w-3 h-3" />
               </button>
               {langOpen && (
                 <div className="absolute right-0 mt-1 w-28 bg-white rounded-xl shadow-elegant-lg border border-border/60 py-1 z-50">
-                  <button onClick={() => { setLanguage("zh"); setLangOpen(false); }} className={`w-full text-left px-4 py-2 text-sm hover:bg-muted/60 transition-colors ${language === "zh" ? "text-primary font-medium" : "text-foreground"}`}>\u4e2d\u6587</button>
+                  <button onClick={() => { setLanguage("zh"); setLangOpen(false); }} className={`w-full text-left px-4 py-2 text-sm hover:bg-muted/60 transition-colors ${language === "zh" ? "text-primary font-medium" : "text-foreground"}`}>中文</button>
                   <button onClick={() => { setLanguage("en"); setLangOpen(false); }} className={`w-full text-left px-4 py-2 text-sm hover:bg-muted/60 transition-colors ${language === "en" ? "text-primary font-medium" : "text-foreground"}`}>English</button>
                 </div>
               )}
@@ -117,7 +117,7 @@ export default function Navbar() {
         <div className="md:hidden border-t border-border/60 bg-white px-4 py-4 space-y-1">
           <div className="flex items-center gap-2 px-4 py-2 border-b border-border/60 mb-2">
             <Globe className="w-4 h-4 text-muted-foreground" />
-            <button onClick={() => { setLanguage("zh"); setMobileOpen(false); }} className={`text-sm px-3 py-1 rounded-lg ${language === "zh" ? "bg-primary/8 text-primary font-medium" : "text-muted-foreground"}`}>\u4e2d\u6587</button>
+            <button onClick={() => { setLanguage("zh"); setMobileOpen(false); }} className={`text-sm px-3 py-1 rounded-lg ${language === "zh" ? "bg-primary/8 text-primary font-medium" : "text-muted-foreground"}`}>中文</button>
             <button onClick={() => { setLanguage("en"); setMobileOpen(false); }} className={`text-sm px-3 py-1 rounded-lg ${language === "en" ? "bg-primary/8 text-primary font-medium" : "text-muted-foreground"}`}>EN</button>
           </div>
           {[...navLinks, ...moreLinks, { href: "/my-requests", label: t("\u6211\u7684\u8ba2\u5355", "My Orders"), icon: User }, { href: "/admin", label: t("\u6f14\u793a\u540e\u53f0", "Admin Demo"), icon: LayoutDashboard }].map((link) => (
