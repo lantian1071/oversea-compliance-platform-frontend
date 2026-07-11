@@ -14,10 +14,9 @@ console.log('Building JS...');
 const entry = path.join(srcDir, 'main.tsx');
 const outfile = path.join(distDir, 'assets', 'index.js');
 
-const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+const esbuildPath = path.join(root, 'node_modules', '.pnpm', '@esbuild+win32-x64@0.21.5', 'node_modules', '@esbuild', 'win32-x64', 'esbuild.exe');
 const args = [
-  npx,
-  'esbuild',
+  esbuildPath,
   entry,
   '--bundle',
   '--minify',
