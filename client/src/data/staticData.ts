@@ -29,6 +29,45 @@ export type ServiceRequest = {
   adminNote?: string;
 };
 
+export type ServiceProduct = {
+  id: number;
+  title: string;
+  supplierName: string;
+  serviceType: string;
+  countries: string;
+  summary: string;
+  deliverables: string[];
+  price: string;
+  duration: string;
+  suitableFor: string;
+  featured: boolean;
+};
+
+export type InsightReport = {
+  id: number;
+  title: string;
+  category: string;
+  region: string;
+  summary: string;
+  metrics: Array<{ label: string; value: string; trend: string }>;
+  highlights: string[];
+  publishedAt: string;
+};
+
+export type BrandProfile = {
+  id: number;
+  supplierId: number;
+  companyName: string;
+  headline: string;
+  intro: string;
+  countries: string;
+  services: string;
+  templateCode: string;
+  language: string;
+  viewCount: number;
+  status: "published" | "draft" | "archived";
+};
+
 export const countries = [
   "新加坡",
   "美国",
@@ -59,6 +98,17 @@ export const serviceTypes = [
   "社保缴纳",
   "劳动合同",
   "员工关系",
+];
+
+export const demandScenarios = [
+  "海外雇佣",
+  "员工派驻",
+  "远程用工",
+  "公司落地",
+  "签证办理",
+  "薪酬社保",
+  "合同审阅",
+  "合规诊断",
 ];
 
 export const suppliers: Supplier[] = [
@@ -178,6 +228,185 @@ export const serviceRequests: ServiceRequest[] = [
     status: "pending",
     createdAt: "2026-05-28T08:00:00.000Z",
   },
+  {
+    id: 103,
+    supplierName: "东亚签证与用工中心",
+    title: "日本工程师工作签证路径确认",
+    description: "计划派驻 3 名研发工程师到东京，希望确认签证类型、材料清单和预计办理周期。",
+    targetCountry: "日本",
+    serviceType: "签证办理",
+    budget: "20,000 - 50,000元",
+    status: "in_progress",
+    createdAt: "2026-06-02T08:00:00.000Z",
+    adminNote: "已进入材料准备阶段，等待候选人学历和工作经历文件。",
+  },
+  {
+    id: 104,
+    supplierName: "中东企业落地服务",
+    title: "阿联酋自由区公司注册咨询",
+    description: "需要比较不同自由区的注册成本、签证配额、办公地址要求和银行开户准备。",
+    targetCountry: "阿联酋",
+    serviceType: "公司注册",
+    budget: "面议",
+    status: "completed",
+    createdAt: "2026-06-08T08:00:00.000Z",
+    adminNote: "已完成方案建议，客户准备进入注册执行阶段。",
+  },
+];
+
+export const serviceProducts: ServiceProduct[] = [
+  {
+    id: 1,
+    title: "新加坡 EP 准证申请评估包",
+    supplierName: "新加坡卓越人力资源集团",
+    serviceType: "签证办理",
+    countries: "新加坡",
+    summary: "面向计划派驻管理层或专业人才的新加坡 EP 准证预评估和材料清单服务。",
+    deliverables: ["候选人条件预评估", "公司资质检查清单", "申请材料清单", "办理周期和风险提示"],
+    price: "¥8,000 起",
+    duration: "3-5 个工作日",
+    suitableFor: "首次派驻员工到新加坡的企业",
+    featured: true,
+  },
+  {
+    id: 2,
+    title: "欧美远程员工合规诊断",
+    supplierName: "欧美雇佣合规顾问",
+    serviceType: "劳动法咨询",
+    countries: "美国,德国,英国,法国,荷兰",
+    summary: "梳理远程员工身份、合同、薪资税务、工时休假和解雇风险。",
+    deliverables: ["用工模式诊断", "核心风险清单", "合同条款建议", "下一步整改路线"],
+    price: "¥12,000 起",
+    duration: "5-7 个工作日",
+    suitableFor: "已有海外远程员工或准备跨国招聘的团队",
+    featured: true,
+  },
+  {
+    id: 3,
+    title: "日本外籍员工入职手续包",
+    supplierName: "东亚签证与用工中心",
+    serviceType: "签证办理",
+    countries: "日本",
+    summary: "覆盖签证匹配、入职材料、劳动合同和社保登记提醒。",
+    deliverables: ["签证路径建议", "入职材料列表", "合同审阅要点", "社保登记流程说明"],
+    price: "¥9,800 起",
+    duration: "5 个工作日",
+    suitableFor: "准备在日本雇佣外籍员工的企业",
+    featured: false,
+  },
+  {
+    id: 4,
+    title: "阿联酋自由区落地方案",
+    supplierName: "中东企业落地服务",
+    serviceType: "公司注册",
+    countries: "阿联酋",
+    summary: "帮助企业比较自由区、注册路径、签证配额和当地运营要求。",
+    deliverables: ["自由区对比", "注册材料清单", "预算测算", "签证配额建议"],
+    price: "¥18,000 起",
+    duration: "7-10 个工作日",
+    suitableFor: "准备在中东设立销售、服务或控股主体的企业",
+    featured: true,
+  },
+  {
+    id: 5,
+    title: "拉美薪税合规月度顾问",
+    supplierName: "拉美用工与薪税顾问",
+    serviceType: "薪酬合规",
+    countries: "巴西,墨西哥",
+    summary: "提供当地薪资税务、福利缴纳、劳动合同和员工关系月度咨询。",
+    deliverables: ["月度薪税咨询", "福利缴纳提醒", "合同问题答疑", "政策更新摘要"],
+    price: "¥6,000/月 起",
+    duration: "按月服务",
+    suitableFor: "已有拉美员工且需要持续合规支持的企业",
+    featured: false,
+  },
+];
+
+export const brandProfiles: BrandProfile[] = [
+  {
+    id: 1,
+    supplierId: 1,
+    companyName: "新加坡卓越人力资源集团",
+    headline: "东南亚雇佣与准证落地专家",
+    intro: "面向中国出海企业提供新加坡、马来西亚和印度尼西亚的工作准证、雇佣合同、薪酬社保和本地雇主服务。",
+    countries: "新加坡,马来西亚,印度尼西亚",
+    services: "签证办理,EOR服务,薪酬合规,劳动合同",
+    templateCode: "premium-asia",
+    language: "中英双语",
+    viewCount: 1286,
+    status: "published",
+  },
+  {
+    id: 2,
+    supplierId: 2,
+    companyName: "欧美雇佣合规顾问",
+    headline: "欧美远程用工风险诊断与整改顾问",
+    intro: "帮助企业处理欧美远程员工合同、薪资税务、员工分类、GDPR 和解雇流程风险。",
+    countries: "美国,德国,英国,法国,荷兰",
+    services: "劳动法咨询,税务合规,GDPR合规,员工关系",
+    templateCode: "trust-advisory",
+    language: "中文",
+    viewCount: 964,
+    status: "published",
+  },
+  {
+    id: 3,
+    supplierId: 4,
+    companyName: "中东企业落地服务",
+    headline: "阿联酋自由区注册与雇佣许可服务",
+    intro: "为进入中东市场的企业提供自由区选择、公司注册、签证配额、雇佣许可和银行开户准备服务。",
+    countries: "阿联酋,沙特阿拉伯",
+    services: "公司注册,签证办理,EOR服务,薪酬合规",
+    templateCode: "market-entry",
+    language: "中英双语",
+    viewCount: 732,
+    status: "draft",
+  },
+];
+
+export const insightReports: InsightReport[] = [
+  {
+    id: 1,
+    title: "2026 东南亚用工需求趋势",
+    category: "需求洞察",
+    region: "东南亚",
+    summary: "中国企业在新加坡、马来西亚和印尼的合规需求集中在工作准证、EOR、薪酬社保和本地合同。",
+    metrics: [
+      { label: "需求增长", value: "38%", trend: "较上季度提升" },
+      { label: "热门服务", value: "签证办理", trend: "询价占比最高" },
+      { label: "平均预算", value: "¥32,000", trend: "中位区间" },
+    ],
+    highlights: ["新加坡仍是区域总部首选", "EOR 适合早期试水团队", "印尼和马来西亚对本地合同要求更细"],
+    publishedAt: "2026-06-12",
+  },
+  {
+    id: 2,
+    title: "欧美远程员工合规风险图谱",
+    category: "风险洞察",
+    region: "欧美",
+    summary: "欧美市场的主要风险来自员工分类、当地薪资税务、解雇通知期和隐私数据处理。",
+    metrics: [
+      { label: "高频风险", value: "员工分类", trend: "咨询量最高" },
+      { label: "重点国家", value: "美国/德国", trend: "复杂度较高" },
+      { label: "整改周期", value: "2-4周", trend: "常见项目周期" },
+    ],
+    highlights: ["美国州法差异明显", "德国劳动保护规则严格", "GDPR 会影响人事数据处理"],
+    publishedAt: "2026-06-15",
+  },
+  {
+    id: 3,
+    title: "中东公司落地服务价格观察",
+    category: "价格洞察",
+    region: "中东",
+    summary: "阿联酋自由区服务报价受自由区类型、签证配额、办公地址和银行开户难度影响。",
+    metrics: [
+      { label: "起步报价", value: "¥18,000", trend: "注册咨询服务" },
+      { label: "高频需求", value: "自由区比较", trend: "企业决策前置" },
+      { label: "交付周期", value: "7-20天", trend: "视材料而定" },
+    ],
+    highlights: ["自由区选择影响后续经营范围", "签证配额需要提前规划", "银行开户材料准备越来越重要"],
+    publishedAt: "2026-06-18",
+  },
 ];
 
 export const platformStats = {
@@ -197,4 +426,19 @@ export function filterSuppliers(country?: string, serviceType?: string) {
 
 export function getSupplierById(id: number) {
   return suppliers.find((item) => item.id === id);
+}
+
+export function filterServiceProducts(country?: string, serviceType?: string) {
+  return serviceProducts
+    .filter((item) => !country || item.countries.includes(country))
+    .filter((item) => !serviceType || item.serviceType === serviceType)
+    .sort((a, b) => Number(b.featured) - Number(a.featured));
+}
+
+export function getServiceProductById(id: number) {
+  return serviceProducts.find((item) => item.id === id);
+}
+
+export function getInsightReportById(id: number) {
+  return insightReports.find((item) => item.id === id);
 }

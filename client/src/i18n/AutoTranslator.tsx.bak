@@ -1,0 +1,582 @@
+import { useEffect } from "react";
+import { useLocation } from "wouter";
+import {
+  brandProfiles,
+  budgets,
+  countries,
+  demandScenarios,
+  insightReports,
+  serviceProducts,
+  serviceRequests,
+  serviceTypes,
+  suppliers,
+  teamSizes,
+} from "./content";
+import { useLanguage } from "./LanguageContext";
+
+type Pair = [zh: string, en: string];
+
+const phrasePairs: Pair[] = [
+  ["首页", "Home"],
+  ["更多", "More"],
+  ["智能问答", "AI Q&A"],
+  ["找服务商", "Find Providers"],
+  ["洞察报告", "Insights"],
+  ["品牌展示", "Brand Pages"],
+  ["发布需求", "Post Demand"],
+  ["服务商入驻", "Provider Onboarding"],
+  ["服务产品", "Service Products"],
+  ["服务商工作台", "Provider Workbench"],
+  ["演示后台", "Admin Demo"],
+  ["我的订单", "My Orders"],
+  ["我的服务订单", "My Service Orders"],
+  ["目的地国服务商洞察平台", "Destination Provider Insight Platform"],
+  ["出海合规服务平台", "Overseas Compliance Service Platform"],
+  ["纯前端版本，复刻线上演示功能入口", "Pure frontend version replicating the online demo entry points"],
+  ["ChainTrack，", "ChainTrack, "],
+  [
+    "覆盖智能问答、找服务商、洞察报告、品牌展示、发布需求、服务商入驻、服务产品和工作台等核心页面。",
+    "Covers AI Q&A, provider search, insights, brand pages, demand posting, provider onboarding, service products and workbench pages.",
+  ],
+  ["浏览服务商", "Browse Providers"],
+  ["认证服务商", "Verified Providers"],
+  ["撮合订单", "Matched Orders"],
+  ["覆盖国家", "Covered Countries"],
+  ["平台核心服务", "Core Platform Services"],
+  [
+    "从合规咨询到服务商匹配、服务产品、洞察报告和工作台，覆盖线上 demo 的主要功能。",
+    "From compliance advisory to provider matching, service products, insight reports and workbench, covering the main online demo features.",
+  ],
+  ["智能合规问答", "AI Compliance Q&A"],
+  [
+    "围绕出海用工、签证、薪酬和社保问题提供即时参考，适合企业 HR 快速梳理问题。",
+    "Provides quick references for overseas employment, visas, payroll and social insurance questions.",
+  ],
+  ["立即咨询", "Ask Now"],
+  [
+    "展示目的地国需求趋势、价格区间、风险图谱和客户画像，帮助服务商理解中国出海企业需求。",
+    "Shows destination demand trends, pricing ranges, risk maps and customer profiles for providers serving Chinese companies.",
+  ],
+  ["查看洞察", "View Insights"],
+  ["查找服务商", "Find Providers"],
+  [
+    "按国家和服务类型筛选合规服务商，查看服务范围、案例数量、评分和联系方式。",
+    "Filter compliance providers by country and service type, then view scope, cases, ratings and contact information.",
+  ],
+  ["浏览目录", "Browse Directory"],
+  [
+    "企业可以提交目标国家、预算、服务类型和需求说明，演示平台撮合流程。",
+    "Companies can submit target country, budget, service type and requirements to demo the matching workflow.",
+  ],
+  [
+    "服务商可以提交入驻资料。静态版本会在浏览器内完成表单演示，不依赖服务器。",
+    "Providers can submit onboarding information. The static demo completes the form flow in the browser without a server.",
+  ],
+  ["提交申请", "Submit Application"],
+  [
+    "以标准化服务包展示目的地国服务内容、交付物、价格和周期。",
+    "Displays destination services as standardized packages with deliverables, pricing and timelines.",
+  ],
+  ["浏览产品", "Browse Products"],
+  ["全球服务覆盖", "Global Service Coverage"],
+  ["点击国家可以直接筛选服务商目录。", "Click a country to filter the provider directory."],
+  ["更多功能入口", "More Feature Entry Points"],
+  ["对应线上页面“更多”菜单中的核心功能。", "Matches the core features under the online demo More menu."],
+  ["服务商专属品牌页", "Dedicated provider brand pages"],
+  ["企业需求提交入口", "Company demand submission entry"],
+  ["标准化服务产品库", "Standardized service product library"],
+  ["撮合和产品管理演示", "Matching and product management demo"],
+  ["精选推荐", "Featured"],
+  ["金牌服务商", "Gold Provider"],
+  ["金牌", "Gold"],
+  ["查看全部", "View All"],
+  ["个案例", " cases"],
+  ["案例", "cases"],
+  ["为什么选择这个版本", "Why This Version"],
+  [
+    "它保留线上 demo 的功能结构，同时改为本地静态数据和浏览器内交互。",
+    "It keeps the online demo structure while using local static data and browser-only interactions.",
+  ],
+  ["专业可信", "Professional and Trusted"],
+  ["清晰展示服务商能力、覆盖区域和服务边界。", "Clearly shows provider capabilities, coverage and service boundaries."],
+  ["全球覆盖", "Global Coverage"],
+  ["覆盖主流出海目的地，便于快速筛选。", "Covers major overseas destinations for quick filtering."],
+  ["纯前端演示", "Pure Frontend Demo"],
+  ["所有页面和交互都可直接在浏览器中体验。", "All pages and interactions can be experienced directly in the browser."],
+  ["覆盖完整流程", "Full Workflow Coverage"],
+  ["从需求发布到服务商工作台，形成完整展示链路。", "Forms a full demo flow from demand posting to provider workbench."],
+  ["服务商目录", "Provider Directory"],
+  ["全球合规服务商", "Global Compliance Providers"],
+  ["找到适合的服务商", "Find the Right Provider"],
+  [
+    "当前为静态演示数据，可直接托管。后续如需真实数据，可以接入腾讯云函数或云开发数据库。",
+    "Current data is static demo data and can be hosted directly. Real data can later connect to Tencent Cloud Functions or CloudBase database.",
+  ],
+  ["目标国家/地区", "Target Country/Region"],
+  ["适用国家/地区", "Applicable Country/Region"],
+  ["服务类型", "Service Type"],
+  ["全部国家", "All Countries"],
+  ["全部国家/地区", "All Countries/Regions"],
+  ["全部服务类型", "All Service Types"],
+  ["清除筛选", "Clear Filters"],
+  ["共找到", "Found"],
+  ["家服务商", " providers"],
+  ["个服务产品", " service products"],
+  ["金牌优先", "Gold providers first"],
+  ["查看详情", "View Details"],
+  ["暂无匹配服务商", "No Matching Providers"],
+  ["可以调整筛选条件，或提交新的服务商入驻信息。", "Adjust filters or submit a new provider onboarding application."],
+  ["浏览可直接采购的合规服务包", "Browse Compliance Service Packages"],
+  [
+    "把原平台中的服务商品化展示为可筛选、可了解交付内容、可发起需求的前端演示页面。",
+    "Displays services as filterable packages with deliverables and demand submission in a frontend demo.",
+  ],
+  ["推荐", "Recommended"],
+  ["服务商", "Provider"],
+  ["适合场景", "Best For"],
+  ["询问该服务", "Ask About This Service"],
+  ["查看相关服务商", "View Related Providers"],
+  ["暂无匹配服务产品", "No Matching Service Products"],
+  ["可以调整筛选条件，或直接发布需求由平台匹配。", "Adjust filters or post a demand for platform matching."],
+  ["出海合规智能问答", "Overseas Compliance AI Q&A"],
+  ["静态演示回答，正式上线可接入真实 AI 服务。", "Static demo answers; production can connect to a real AI service."],
+  ["您好，我是出海合规顾问", "Hello, I am your overseas compliance advisor"],
+  ["可以询问劳动法、工作签证、薪酬合规、社保和 EOR 相关问题。", "Ask about labor law, work visas, payroll compliance, social insurance and EOR topics."],
+  ["正在整理回答", "Preparing answer"],
+  ["输入您的出海合规问题", "Enter your overseas compliance question"],
+  ["回答仅供参考，具体合规事项请咨询当地专业顾问。", "Answers are for reference only. Please consult local professionals for specific compliance matters."],
+  ["描述出海合规需求，匹配合适服务商", "Describe Your Overseas Compliance Needs and Match Providers"],
+  ["用表单演示企业提交需求、平台整理线索、服务商跟进的核心流程。", "Demo the core flow of demand submission, platform lead organization and provider follow-up."],
+  ["填写背景", "Fill Background"],
+  ["说明目标国家、员工规模、业务场景和时间要求。", "Describe target country, employee scale, business scenario and timeline."],
+  ["平台匹配", "Platform Matching"],
+  ["演示版展示提交结果，正式版可匹配服务商。", "Demo shows submission result; production can match providers."],
+  ["预算沟通", "Budget Discussion"],
+  ["预算用于服务商判断方案复杂度和报价范围。", "Budget helps providers assess solution complexity and pricing range."],
+  ["需求信息", "Demand Information"],
+  ["需求标题", "Demand Title"],
+  ["业务场景", "Business Scenario"],
+  ["目标国家", "Target Country"],
+  ["预算范围", "Budget Range"],
+  ["联系人", "Contact Person"],
+  ["联系邮箱", "Contact Email"],
+  ["需求说明", "Requirement Details"],
+  ["请选择", "Please select"],
+  ["请选择场景", "Select scenario"],
+  ["请选择国家", "Select country"],
+  ["请选择国家地区", "Select country/region"],
+  ["请选择国家/地区", "Select country/region"],
+  ["请选择服务类型", "Select service type"],
+  ["请选择预算", "Select budget"],
+  ["您的姓名", "Your name"],
+  ["例如：德国远程员工合规咨询", "Example: Germany remote employee compliance advisory"],
+  ["请说明员工人数、目标国家、期望服务、时间安排和当前遇到的问题", "Describe headcount, target country, expected service, timeline and current issues"],
+  ["需求已发布", "Demand Published"],
+  [
+    "这是纯前端演示提交，系统会展示发布成功状态。正式版可接入登录、数据库和服务商匹配流程。",
+    "This is a pure frontend demo submission. Production can connect login, database and provider matching.",
+  ],
+  ["查看我的需求", "View My Demands"],
+  ["再发布一条", "Post Another"],
+  ["加入出海合规服务平台", "Join the Overseas Compliance Service Platform"],
+  ["填写资料后即可看到提交效果，适合静态网站演示和业务验证。", "Fill in the form to see the submission effect, suitable for static-site demos and business validation."],
+  ["入驻平台的优势", "Benefits of Joining"],
+  ["精准客户资源", "Targeted Customer Leads"],
+  ["展示给有真实出海合规需求的企业用户。", "Shown to companies with real overseas compliance needs."],
+  ["金牌优先推荐", "Gold Priority Recommendation"],
+  ["签约服务商可以在目录中获得更醒目的展示。", "Signed providers receive more prominent directory placement."],
+  ["平台信用背书", "Platform Credibility"],
+  ["通过平台认证后提升客户初步信任。", "Platform verification helps build initial customer trust."],
+  ["全球服务网络", "Global Service Network"],
+  ["按国家和服务类型组织，方便客户筛选。", "Organized by country and service type for easy filtering."],
+  ["填写入驻申请", "Provider Application"],
+  ["公司名称", "Company Name"],
+  ["英文名称", "English Name"],
+  ["联系电话", "Phone"],
+  ["成立年份", "Founded Year"],
+  ["团队规模", "Team Size"],
+  ["官网地址", "Website"],
+  ["覆盖国家地区", "Coverage Countries/Regions"],
+  ["公司介绍", "Company Introduction"],
+  ["请介绍服务能力、专业优势和典型经验", "Describe service capabilities, strengths and representative experience"],
+  ["提交入驻申请", "Submit Provider Application"],
+  ["申请已提交", "Application Submitted"],
+  [
+    "这是静态托管版本的演示提交，信息不会写入服务器。正式上线时可以把这里接入腾讯云函数、表单收集或云数据库。",
+    "This is a static-hosting demo submission and will not write to a server. Production can connect Cloud Functions, form collection or database.",
+  ],
+  ["目的地国服务商品牌页", "Destination Provider Brand Pages"],
+  ["服务商品牌页演示", "Provider Brand Page Demo"],
+  [
+    "根据需求文件，这里演示白标品牌页：出海企业看到的是服务商自己的品牌、中文介绍、服务项目、价格和联系入口。",
+    "This demos white-label brand pages: overseas companies see the provider's own brand, introduction, services, pricing and contact entry.",
+  ],
+  ["选择服务商", "Select Provider"],
+  ["模板选择", "Template Selection"],
+  ["综合服务版", "Integrated Service Template"],
+  ["适合 relocation、签证、薪酬社保等一站式服务商。", "For one-stop providers covering relocation, visas, payroll and social insurance."],
+  ["专业顾问版", "Professional Advisory Template"],
+  ["突出资质、案例、风险诊断和长期顾问能力。", "Highlights credentials, cases, risk diagnosis and long-term advisory."],
+  ["市场落地版", "Market Entry Template"],
+  ["适合公司注册、银行开户、园区落地和本地运营服务。", "For company setup, bank accounts, zone entry and local operations."],
+  ["白标品牌页预览", "White-label Brand Page Preview"],
+  ["预览地址", "Preview URL"],
+  ["中文", "Chinese"],
+  ["桌面预览", "Desktop Preview"],
+  ["手机预览", "Mobile Preview"],
+  ["发布页面", "Publish Page"],
+  ["保存草稿", "Save Draft"],
+  ["覆盖地区", "Coverage"],
+  ["联系表单", "Contact Form"],
+  ["提交后通知服务商，ChainTrack 对外不可见。", "Submission notifies the provider; ChainTrack stays invisible externally."],
+  ["需求文件中的白标规则已体现在页面里", "White-label Rules from the Requirements Are Reflected"],
+  ["公众品牌页不出现 ChainTrack，后台和服务商工作台才保留平台标识。", "Public brand pages do not show ChainTrack; internal admin and provider workbench keep platform branding."],
+  ["查看服务商", "View Provider"],
+  ["概览", "Overview"],
+  ["服务商审核", "Provider Review"],
+  ["订单撮合", "Order Matching"],
+  ["洞察内容", "Insight Content"],
+  ["用于展示平台内部管理：服务商审核、订单撮合、洞察内容和白标发布状态。", "Shows internal management: provider review, order matching, insights and white-label publishing status."],
+  ["刷新演示数据", "Refresh Demo Data"],
+  ["待审核申请", "Pending Applications"],
+  ["待处理订单", "Pending Orders"],
+  ["已完成订单", "Completed Orders"],
+  ["白标规则", "White-label Rules"],
+  ["对中国出海企业可见页面不显示 ChainTrack；内部后台可显示 Powered by ChainTrack。", "Pages visible to Chinese overseas companies do not show ChainTrack; internal admin may show Powered by ChainTrack."],
+  ["匹配逻辑", "Matching Logic"],
+  ["根据目的地、服务类型、企业规模和语言能力，生成匹配度和推荐理由。", "Generates match scores and reasons based on destination, service type, company scale and language capabilities."],
+  ["数据闭环", "Data Loop"],
+  ["服务记录、满意度、服务商反馈会反哺后续洞察报告和产品框架。", "Service records, satisfaction and provider feedback improve future insights and product frameworks."],
+  ["查看入驻页", "View Onboarding Page"],
+  ["已驳回", "Rejected"],
+  ["已通过", "Approved"],
+  ["待审核", "Pending Review"],
+  ["通过", "Approve"],
+  ["驳回", "Reject"],
+  ["订单详情", "Order Details"],
+  ["推荐服务商", "Recommended Provider"],
+  ["匹配度", "Match Score"],
+  ["匹配原因", "Match Reason"],
+  ["目的地与服务类型高度一致，有中文沟通能力。", "Destination and service type match strongly, with Chinese communication capability."],
+  ["标记已联系", "Mark Contacted"],
+  ["进入执行", "Move to Execution"],
+  ["完成订单", "Complete Order"],
+  ["品牌页发布状态", "Brand Page Status"],
+  ["演示中国出海企业提交需求、查看匹配服务商、跟进进度和评价服务的流程。", "Demo the flow for Chinese companies to submit demand, view matched providers, track progress and leave feedback."],
+  ["发布新需求", "Post New Demand"],
+  ["全部订单", "All Orders"],
+  ["待处理", "Pending"],
+  ["已联系", "Contacted"],
+  ["进行中", "In Progress"],
+  ["已完成", "Completed"],
+  ["当前筛选下暂无订单", "No Orders Under This Filter"],
+  ["可以切换状态，或发布新的服务需求。", "Switch status or post a new service demand."],
+  ["订单跟进", "Order Progress"],
+  ["需求提交", "Demand Submitted"],
+  ["平台收到目标国家、服务类型和预算信息", "Platform received target country, service type and budget."],
+  ["服务商匹配", "Provider Matching"],
+  ["联系确认", "Contact Confirmation"],
+  ["等待顾问联系", "Waiting for advisor contact"],
+  ["顾问已进入跟进", "Advisor is following up"],
+  ["交付反馈", "Delivery Feedback"],
+  ["已完成，可评价", "Completed, rating available"],
+  ["完成服务后开放评价", "Rating opens after service completion"],
+  ["平台备注", "Platform Note"],
+  ["服务评价演示", "Service Rating Demo"],
+  ["记录本次服务反馈，用于后续洞察迭代", "Record service feedback for future insight iteration"],
+  ["保存评价", "Save Rating"],
+  ["目的地国服务洞察报告", "Destination Service Insight Reports"],
+  ["查看报告", "View Report"],
+  ["洞察订阅权益", "Insight Subscription Benefits"],
+  ["正式版可根据套餐展示需求洞察、价格洞察、客户画像和中文沟通辅助。", "Production can show demand insights, pricing insights, customer profiles and Chinese communication support by plan."],
+  ["报告不存在", "Report Not Found"],
+  ["返回洞察报告", "Back to Insights"],
+  ["核心发现", "Key Findings"],
+  ["页面不存在", "Page Not Found"],
+  ["请返回首页，或从顶部导航重新进入。", "Please return home or use the top navigation."],
+  ["返回首页", "Back Home"],
+  ["服务商不存在", "Provider Not Found"],
+  ["返回服务商列表", "Back to Provider List"],
+  ["金牌签约服务商", "Gold Signed Provider"],
+  ["个成功案例", " successful cases"],
+  ["成立于", "Founded in"],
+  ["服务范围", "Service Scope"],
+  ["覆盖国家/地区", "Coverage Countries/Regions"],
+  ["发起合作询价", "Start Cooperation Inquiry"],
+  ["静态版本会在浏览器内完成演示提交。", "The static version completes demo submission in the browser."],
+  ["立即发起询价", "Start Inquiry"],
+  ["需求标题，例如：新加坡EP准证申请", "Demand title, e.g. Singapore EP application"],
+  ["补充说明您的需求", "Add details about your needs"],
+  ["取消", "Cancel"],
+  ["提交", "Submit"],
+  ["联系方式", "Contact"],
+  ["访问官网", "Visit Website"],
+  ["预览服务商主页", "Preview Provider Page"],
+  ["待跟进需求", "Demands to Follow Up"],
+  ["品牌页浏览", "Brand Page Views"],
+  ["金牌状态", "Gold Status"],
+  ["已签约", "Signed"],
+  ["未签约", "Not Signed"],
+  ["撮合记录", "Match Records"],
+  ["品牌页", "Brand Page"],
+  ["洞察权益", "Insight Benefits"],
+  ["尚未生成品牌页", "No Brand Page Yet"],
+  ["升级至品牌套餐后，平台将为您生成专属品牌展示页。", "After upgrading to the brand plan, the platform will generate a dedicated brand page."],
+  ["需求洞察报告", "Demand Insight Reports"],
+  ["价格洞察报告", "Pricing Insight Reports"],
+  ["客户画像分析", "Customer Profile Analysis"],
+  ["中文沟通辅助", "Chinese Communication Support"],
+  ["当前演示账号可查看该权益样式。", "The demo account can view this benefit style."],
+  ["浏览洞察报告", "Browse Insights"],
+  ["请填写公司名称、联系人、邮箱和公司介绍", "Please fill in company name, contact person, email and company introduction"],
+  ["请至少选择一种服务类型和一个覆盖国家", "Please select at least one service type and one coverage country"],
+  ["请填写需求标题", "Please enter a demand title"],
+  ["询价信息已在本地演示提交。静态托管版本不会写入服务器。", "The inquiry has been submitted in the local demo. The static-hosting version will not write to a server."],
+];
+
+const qaPairs: Pair[] = [
+  ["新加坡 EP 准证申请条件是什么？", "What are the requirements for a Singapore EP application?"],
+  ["德国劳动法对解雇员工有哪些要求？", "What does German labor law require for employee termination?"],
+  ["美国 EOR 服务通常适合什么场景？", "When is US EOR service usually suitable?"],
+  ["越南雇主需要缴纳哪些社保？", "What social insurance contributions do Vietnamese employers need?"],
+  ["日本雇佣外籍员工需要哪些手续？", "What procedures are needed to hire foreign employees in Japan?"],
+  ["阿联酋自由区注册公司有什么优势？", "What are the advantages of registering in a UAE free zone?"],
+  [
+    "新加坡常见工作准证包括 EP、S Pass 等。企业通常需要先确认岗位、薪资、候选人学历经验和公司资质。实际审批会受行业、薪资水平和候选人背景影响。",
+    "Common Singapore work passes include EP and S Pass. Companies should confirm role, salary, candidate education/experience and company qualifications. Approval depends on industry, salary level and candidate background.",
+  ],
+  [
+    "德国用工对劳动合同、工时、休假、解雇通知期和员工代表机制较为严格。涉及解雇时，建议先确认适用的雇佣保护规则和书面流程。",
+    "German employment rules are strict on contracts, working hours, leave, termination notice and employee representation. For termination, confirm applicable protection rules and written procedures first.",
+  ],
+  [
+    "美国各州规则差异明显。远程雇佣、薪资税、员工分类和福利要求都需要按州判断。EOR 可用于快速雇佣，但仍需确认岗位管理和合规责任边界。",
+    "US rules vary significantly by state. Remote employment, payroll tax, worker classification and benefits must be assessed state by state. EOR can enable quick hiring but responsibilities still need review.",
+  ],
+  [
+    "越南雇佣通常涉及劳动合同、个人所得税、社会保险、健康保险和失业保险。外籍员工还可能涉及工作许可或豁免条件。",
+    "Vietnam employment usually involves contracts, personal income tax, social insurance, health insurance and unemployment insurance. Foreign employees may also need work permits or exemptions.",
+  ],
+  [
+    "日本雇佣外籍员工通常需要匹配签证类型、岗位职责和候选人背景，同时关注入职手续、社保、劳动合同和工时管理。",
+    "Hiring foreign employees in Japan requires matching visa type, job duties and candidate background, plus onboarding, social insurance, contracts and working-hour management.",
+  ],
+  [
+    "阿联酋自由区通常在公司设立、外资持股、办公地址和签证配额方面有便利条件，但不同自由区规则和成本不同，需要按业务范围选择。",
+    "UAE free zones often offer convenience for setup, foreign ownership, office address and visa quota, but rules and costs vary by zone and business scope.",
+  ],
+  [
+    "这个问题可以先从目标国家、员工身份、雇佣模式、薪资福利和合同安排五个方面梳理。",
+    "Start by clarifying target country, employee status, employment model, compensation/benefits and contract setup.",
+  ],
+  [
+    "静态托管版本无法连接实时 AI 或法规数据库，因此这里提供的是演示性回答。正式使用时建议接入后端问答服务，并由专业顾问复核。",
+    "The static-hosting version cannot connect to real-time AI or legal databases, so this is a demo answer. Production should connect a backend Q&A service and professional review.",
+  ],
+];
+
+function buildDictionary() {
+  const dictionary = new Map<string, string>();
+  const add = (zh: string | undefined, en: string | undefined) => {
+    if (zh && en && zh !== en) dictionary.set(zh, en);
+  };
+
+  [...phrasePairs, ...qaPairs].forEach(([zh, en]) => add(zh, en));
+  countries.zh.forEach((zh, index) => add(zh, countries.en[index]));
+  serviceTypes.zh.forEach((zh, index) => add(zh, serviceTypes.en[index]));
+  demandScenarios.zh.forEach((zh, index) => add(zh, demandScenarios.en[index]));
+  teamSizes.zh.forEach((zh, index) => add(zh, teamSizes.en[index]));
+  budgets.zh.forEach((zh, index) => add(zh, budgets.en[index]));
+
+  suppliers.forEach((item) => {
+    add(item.companyName.zh, item.companyName.en);
+    add(item.description.zh, item.description.en);
+    add(item.serviceTypes.zh, item.serviceTypes.en);
+    add(item.coverageCountries.zh, item.coverageCountries.en);
+    add(item.teamSize.zh, item.teamSize.en);
+  });
+  serviceRequests.forEach((item) => {
+    add(item.supplierName.zh, item.supplierName.en);
+    add(item.title.zh, item.title.en);
+    add(item.description.zh, item.description.en);
+    add(item.targetCountry.zh, item.targetCountry.en);
+    add(item.serviceType.zh, item.serviceType.en);
+    add(item.budget.zh, item.budget.en);
+    add(item.adminNote?.zh, item.adminNote?.en);
+  });
+  serviceProducts.forEach((item) => {
+    add(item.title.zh, item.title.en);
+    add(item.supplierName.zh, item.supplierName.en);
+    add(item.serviceType.zh, item.serviceType.en);
+    add(item.countries.zh, item.countries.en);
+    add(item.summary.zh, item.summary.en);
+    add(item.price.zh, item.price.en);
+    add(item.duration.zh, item.duration.en);
+    add(item.suitableFor.zh, item.suitableFor.en);
+    item.deliverables.zh.forEach((zh, index) => add(zh, item.deliverables.en[index]));
+  });
+  brandProfiles.forEach((item) => {
+    add(item.companyName.zh, item.companyName.en);
+    add(item.headline.zh, item.headline.en);
+    add(item.intro.zh, item.intro.en);
+    add(item.countries.zh, item.countries.en);
+    add(item.services.zh, item.services.en);
+    add(item.language.zh, item.language.en);
+  });
+  insightReports.forEach((item) => {
+    add(item.title.zh, item.title.en);
+    add(item.category.zh, item.category.en);
+    add(item.region.zh, item.region.en);
+    add(item.summary.zh, item.summary.en);
+    item.metrics.zh.forEach((metric, index) => {
+      const en = item.metrics.en[index];
+      add(metric.label, en?.label);
+      add(metric.value, en?.value);
+      add(metric.trend, en?.trend);
+    });
+    item.highlights.zh.forEach((zh, index) => add(zh, item.highlights.en[index]));
+  });
+  return dictionary;
+}
+
+const dictionary = buildDictionary();
+const phrases = Array.from(dictionary.entries()).sort((a, b) => b[0].length - a[0].length);
+const textNodeOriginals = new WeakMap<Text, string>();
+const originalAttributePrefix = "data-i18n-original";
+const attributeNames = ["placeholder", "aria-label", "title"];
+
+function translateText(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return value;
+
+  const exact = dictionary.get(trimmed);
+  if (exact) return value.replace(trimmed, exact);
+
+  let translated = value;
+  for (const [zh, en] of phrases) {
+    if (translated.includes(zh)) translated = translated.split(zh).join(en);
+  }
+
+  return translated
+    .replace(/共找到\s*(\d+)\s*家服务商/g, "Found $1 providers")
+    .replace(/共找到\s*(\d+)\s*个服务产品/g, "Found $1 service products")
+    .replace(/已选择\s*(\d+)\s*项/g, "$1 selected")
+    .replace(/(\d+)\s*字/g, "$1 characters")
+    .replace(/(\d+)\s*案例/g, "$1 cases")
+    .replace(/(\d+)\s*个成功案例/g, "$1 successful cases")
+    .replace(/(\d+)\s*次浏览/g, "$1 views")
+    .replace(/(\d+)\s*人以上/g, "$1+ people")
+    .replace(/(\d+)-(\d+)人/g, "$1-$2 people")
+    .replace(/(\d+)\s*个工作日/g, "$1 business days")
+    .replace(/(\d+)-(\d+)\s*个工作日/g, "$1-$2 business days")
+    .replace(/(\d+)-(\d+)天/g, "$1-$2 days")
+    .replace(/成立于\s*(\d+)\s*年/g, "Founded in $1")
+    .replace(/成立于\s*(\d+)/g, "Founded in $1")
+    .replace(/预算：/g, "Budget: ")
+    .replace(/服务商：/g, "Provider: ")
+    .replace(/团队规模：/g, "Team size: ")
+    .replace(/语言：/g, "Language: ")
+    .replace(/模板：/g, "Template: ")
+    .replace(/元以内/g, " CNY or less")
+    .replace(/元/g, " CNY")
+    .replace(/面议/g, "Negotiable")
+    .replace(/草稿/g, "Draft")
+    .replace(/已发布/g, "Published");
+}
+
+function shouldSkipElement(element: Element | null) {
+  if (!element) return true;
+  const tagName = element.tagName.toLowerCase();
+  return tagName === "script" || tagName === "style" || tagName === "svg" || element.closest("[data-i18n-skip]") !== null;
+}
+
+function translateNodeText(node: Text) {
+  if (shouldSkipElement(node.parentElement)) return;
+  const current = node.nodeValue ?? "";
+  const savedOriginal = textNodeOriginals.get(node);
+  const savedTranslated = savedOriginal ? translateText(savedOriginal) : undefined;
+  const original =
+    savedOriginal && (current === savedOriginal || current === savedTranslated) ? savedOriginal : current;
+  textNodeOriginals.set(node, original);
+  const translated = translateText(original);
+  if (translated !== current) node.nodeValue = translated;
+}
+
+function restoreNodeText(node: Text) {
+  const original = textNodeOriginals.get(node);
+  if (original !== undefined && node.nodeValue !== original) node.nodeValue = original;
+}
+
+function translateAttributes(element: Element) {
+  if (shouldSkipElement(element)) return;
+  for (const name of attributeNames) {
+    const current = element.getAttribute(name);
+    if (!current) continue;
+    const originalName = `${originalAttributePrefix}-${name}`;
+    const savedOriginal = element.getAttribute(originalName);
+    const savedTranslated = savedOriginal ? translateText(savedOriginal) : undefined;
+    const original = savedOriginal && (current === savedOriginal || current === savedTranslated) ? savedOriginal : current;
+    element.setAttribute(originalName, original);
+    element.setAttribute(name, translateText(original));
+  }
+}
+
+function restoreAttributes(element: Element) {
+  for (const name of attributeNames) {
+    const original = element.getAttribute(`${originalAttributePrefix}-${name}`);
+    if (original !== null) element.setAttribute(name, original);
+  }
+}
+
+function walk(root: ParentNode, mode: "translate" | "restore") {
+  const textWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let textNode = textWalker.nextNode();
+  while (textNode) {
+    if (mode === "translate") translateNodeText(textNode as Text);
+    else restoreNodeText(textNode as Text);
+    textNode = textWalker.nextNode();
+  }
+
+  if (root instanceof Element) {
+    mode === "translate" ? translateAttributes(root) : restoreAttributes(root);
+  }
+  root.querySelectorAll?.("*").forEach((element) => {
+    mode === "translate" ? translateAttributes(element) : restoreAttributes(element);
+  });
+}
+
+export default function AutoTranslator() {
+  const { language } = useLanguage();
+  const [location] = useLocation();
+
+  useEffect(() => {
+    const mode = language === "en" ? "translate" : "restore";
+    const apply = () => walk(document.body, mode);
+    apply();
+
+    if (language !== "en") return;
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "characterData") translateNodeText(mutation.target as Text);
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.TEXT_NODE) translateNodeText(node as Text);
+          if (node.nodeType === Node.ELEMENT_NODE) walk(node as Element, "translate");
+        });
+        if (mutation.type === "attributes" && mutation.target instanceof Element) translateAttributes(mutation.target);
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: attributeNames,
+    });
+
+    return () => observer.disconnect();
+  }, [language, location]);
+
+  return null;
+}
+
