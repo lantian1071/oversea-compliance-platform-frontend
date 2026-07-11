@@ -6,7 +6,7 @@
     "serviceName": "oversea",
     "framework": "vite",
     "installCommand": "npm install",
-    "buildCommand": "npm run build",
+    "buildCommand": "node build.cjs",
     "outputDir": "dist"
   }
 }
