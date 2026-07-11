@@ -62,7 +62,8 @@ function shouldSkipElement(element: Element | null) {   if (!element) return tru
   const [location] = useLocation();
 
   useEffect(() => {
-    const mode = language === "en" ? "translate" : "restore";
+    const isEn = language === "en";
+    const mode = isEn ? "translate" : "restore";
     
     function doWalk() {
       if (document.body) {
@@ -75,6 +76,17 @@ function shouldSkipElement(element: Element | null) {   if (!element) return tru
     requestAnimationFrame(doWalk);
     setTimeout(doWalk, 100);
     setTimeout(doWalk, 300);
+    
+    // Manage MutationObserver for live DOM changes
+    if (isEn) {
+      setTimeout(() => startObserver("en"), 500);
+    } else {
+      stopObserver();
+    }
+    
+    return () => {
+      stopObserver();
+    };
   }, [language, location]);
 
   return null;
