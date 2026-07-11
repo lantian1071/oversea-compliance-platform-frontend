@@ -18,7 +18,7 @@ export default function InsightsPage() {
             </div>
             <h1 className="text-2xl font-bold">目的地国服务洞察报告</h1>
           </div>
-          <p className="text-slate-300 text-sm max-w-xl">
+          <p className="text-slate-300 text-sm max-w-xl mx-auto">
             展示需求分布、价格区间、风险趋势和客户画像，帮助服务商理解中国出海企业需求。
           </p>
         </div>

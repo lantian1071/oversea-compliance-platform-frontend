@@ -125,10 +125,10 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border); outline-color: var(--ring) / 0.5;
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background); color: var(--foreground);
     font-family: "Inter", "Noto Serif SC", -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -141,8 +141,24 @@
 
 @layer utilities {
   .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
     max-width: 1280px;
+    width: 100%;
+  }
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
   }
   .flex {
     min-width: 0;

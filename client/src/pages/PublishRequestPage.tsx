@@ -35,7 +35,7 @@ export default function PublishRequestPage() {
   if (submitted) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
-        <div className="max-w-md text-center">
+        <div className="max-w-md text-center mx-auto">
           <div className="w-20 h-20 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-10 h-10 text-emerald-500" />
           </div>
@@ -63,7 +63,7 @@ export default function PublishRequestPage() {
     <div className="min-h-screen bg-background">
       <div className="bg-[oklch(0.18_0.04_240)] text-white">
         <div className="container py-14">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto">
             <div className="flex items-center gap-2 mb-4">
               <ClipboardList className="w-5 h-5 text-[oklch(0.82_0.12_75)]" />
               <span className="text-sm font-medium text-[oklch(0.75_0.02_240)]">发布需求</span>

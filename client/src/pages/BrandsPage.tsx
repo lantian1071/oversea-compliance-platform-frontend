@@ -39,7 +39,7 @@ export default function BrandsPage() {
             </div>
             <h1 className="text-2xl font-bold">服务商品牌页演示</h1>
           </div>
-          <p className="text-slate-300 text-sm max-w-2xl">
+          <p className="text-slate-300 text-sm max-w-2xl mx-auto">
             根据需求文件，这里演示白标品牌页：出海企业看到的是服务商自己的品牌、中文介绍、服务项目、价格和联系入口。
           </p>
         </div>
@@ -130,7 +130,7 @@ export default function BrandsPage() {
                     <span className="hidden sm:inline-flex text-xs px-3 py-1 rounded-full bg-white/10">{isPublished ? "Public" : "Draft"}</span>
                   </div>
                   <h4 className="text-2xl font-serif font-bold mt-8 mb-3">{language === "zh" ? activeProfile.headline : "Trusted destination service partner for Chinese companies"}</h4>
-                  <p className="text-sm leading-relaxed text-slate-300 max-w-2xl">
+                  <p className="text-sm leading-relaxed text-slate-300 max-w-2xl mx-auto">
                     {language === "zh" ? activeProfile.intro : "We provide localized support for Chinese companies entering the destination market, including service design, delivery coordination and bilingual communication."}
                   </p>
                 </div>

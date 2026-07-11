@@ -20,7 +20,7 @@ export default function ServiceProductsPage() {
     <div className="min-h-screen bg-background">
       <div className="bg-[oklch(0.18_0.04_240)] text-white">
         <div className="container py-14">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto">
             <div className="flex items-center gap-2 mb-4">
               <PackageCheck className="w-5 h-5 text-[oklch(0.82_0.12_75)]" />
               <span className="text-sm font-medium text-[oklch(0.75_0.02_240)]">服务产品</span>

@@ -31,7 +31,7 @@ export default function InsightDetailPage() {
         </div>
       </div>
 
-      <article className="container py-8 max-w-4xl">
+      <article className="container py-8 max-w-4xl mx-auto">
         <div className="mb-8">
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary/8 text-primary mb-4">
             <BarChart3 className="w-3 h-3" />
